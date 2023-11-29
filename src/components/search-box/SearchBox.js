@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, TextInput, Text, TouchableOpacity, Pressable, Modal } from 'react-native';
+import { StyleSheet, View, TextInput, Text, TouchableOpacity, Pressable, Modal, ScrollView, Alert } from 'react-native';
 // import { Button } from 'react-native';
 import { Button } from '@rneui/base';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -12,40 +12,64 @@ import { ModalButton } from "react-native-modals";
 import { ModalTitle } from "react-native-modals";
 import { SlideAnimation } from "react-native-modals";
 import { ModalContent } from "react-native-modals";
-
+import { ListItem } from '@rneui/base';
+import { useDispatch } from 'react-redux';
+import HotelAction from '../../redux/hotel/action';
 const SearchBox = ({ navigation }) => {
-    // const [date, setDate] = useState(new Date())
-    // const [open, setOpen] = useState(false)
-    const [openDateModel, setOpenDateModel] = useState(false);
+    const [openDateModal, setOpenDateModal] = useState(false);
     const [openOptionModal, setOpenOptionModal] = useState(false);
     const [openProvinceModal, setOpenProvinceModal] = useState(false);
     const [provinces, setProvinces] = useState('');
     const [rooms, setRooms] = useState(1);
     const [adults, setAdults] = useState(2);
     const [children, setChildren] = useState(0);
-    const [modalVisible, setmodalVisible] = useState(false);
-    // const []
+    const [startDay, setStartDay] = useState(null);
+    const [endDay, setEndDay] = useState(null)
+    const dispatch = useDispatch();
     const search = () => {
-        navigation.navigate('Result')
+        if (!provinces && !startDay && !endDay) {
+            Alert.alert("Xin hãy chọn đầy đủ thông tin")
+        }
+        else {
+            dispatch({
+                type: HotelAction.SEARCH_HOTELS_START,
+                province: provinces,
+                adults: adults,
+                children: children,
+                rooms: rooms,
+                startDay: startDay,
+                endDay: endDay,
+                onSuccess: () => {
+                    navigation.navigate('Result')
+                },
+                onError: () => {
+                    Alert.alert("Không tìm thấy")
+                }
+            })
+        }
     };
     return (
         <View style={styles.container}>
             <View style={{ ...styles.inputWrapper, position: 'relative' }}>
                 <Icon name="location-pin" size={30} color="#004EA9" />
                 <Pressable style={styles.input} onPress={() => { setOpenProvinceModal(true) }}>
-                    <Text>
-                        Điểm đến
-                    </Text>
+                    <TextInput
+                        placeholderTextColor="black"
+                        editable={false}
+                        placeholder={`${provinces || "Chọn điểm đến"}`}
+                    />
                 </Pressable>
             </View>
             <View style={styles.inputWrapper}>
                 <TouchableOpacity style={styles.inputWrapper} onPress={() => setOpen(true)}>
                     <Icon name="date-range" size={30} color="#004EA9" />
                 </TouchableOpacity>
-                <Pressable style={styles.input} onPress={() => { setOpenDateModel(true) }}>
-                    <Text>
-                        Checkin-Checkout
-                    </Text>
+                <Pressable style={styles.input} onPress={() => { setOpenDateModal(true) }}>
+                    <TextInput
+                        placeholderTextColor="black"
+                        editable={false}
+                        placeholder={`${startDay || "Check-in"} -  ${endDay || "Check-out"}`}
+                    />
                 </Pressable>
 
             </View>
@@ -53,7 +77,7 @@ const SearchBox = ({ navigation }) => {
 
             <View style={styles.inputWrapper}>
                 <Icon name="person" size={30} color="#004EA9" />
-                <Pressable style={styles.input} onPress={() => { setOpenOptionModal(true); setmodalVisible(!modalVisible) }}>
+                <Pressable style={styles.input} onPress={() => { setOpenOptionModal(true); }}>
                     <TextInput
                         placeholderTextColor="black"
                         editable={false}
@@ -67,39 +91,42 @@ const SearchBox = ({ navigation }) => {
                 title="Tìm"
                 onPress={search}
             />
-            {openDateModel && (
+            {openDateModal && (
                 <>
-                    <Modal>
-                        <DateRangePicker handleSave={() => setOpenDateModel(false)} />
-                        {/* <Button
-                            style={styles.button}
-                            title="Save"
-                            onPress={() => setOpenDateModel(false)} /> */}
-                        <Button
-                            buttonStyle={{ ...styles.buttonCancel, marginTop: 10 }}
-                            title="Back"
-                            onPress={() => setOpenDateModel(false)} />
-                    </Modal>
+                    <BottomModal
+                        swipeThreshold={200}
+                        onBackdropPress={() => setOpenDateModal(!openDateModal)}
+                        swipeDirection={["up", "down"]}
+                        footer={
+                            <ModalFooter>
+                                <ModalButton
+                                    text="Apply"
+                                    style={{
+                                        marginBottom: 20,
+                                        color: "white",
+                                        backgroundColor: "#003580",
+                                    }}
+                                    onPress={() => setOpenDateModal(!openDateModal)}
+                                />
+                            </ModalFooter>
+                        }
+                        modalTitle={<ModalTitle title="Select Date" />}
+                        onHardwareBackPress={() => setOpenDateModal(!openDateModal)}
+                        visible={openDateModal}
+                        onTouchOutside={() => setOpenDateModal(!openDateModal)}
+                    >
+                        <ModalContent style={{ width: "100%", height: 310 }}>
+                            <DateRangePicker handleSave={() => setOpenDateModal(openDateModal)} onEndDay={setEndDay} onStartDay={setStartDay} />
+                        </ModalContent>
+                    </BottomModal>
                 </>
             )}
             {openProvinceModal &&
                 (
                     <>
-                        <Modal>
-                            <Button
-                                buttonStyle={styles.buttonCancel}
-                                title="Back"
-                                onPress={() => setOpenProvinceModal(false)} />
-                        </Modal>
-                    </>
-                )
-            }
-            {openOptionModal &&
-                (
-                    <>
                         <BottomModal
                             swipeThreshold={200}
-                            onBackdropPress={() => setmodalVisible(!modalVisible)}
+                            onBackdropPress={() => setOpenProvinceModal(!openProvinceModal)}
                             swipeDirection={["up", "down"]}
                             footer={
                                 <ModalFooter>
@@ -110,7 +137,50 @@ const SearchBox = ({ navigation }) => {
                                             color: "white",
                                             backgroundColor: "#003580",
                                         }}
-                                        onPress={() => setmodalVisible(!modalVisible)}
+                                        onPress={() => setOpenProvinceModal(!openProvinceModal)}
+                                    />
+                                </ModalFooter>
+                            }
+                            modalTitle={<ModalTitle title="Select province" />}
+                            onHardwareBackPress={() => setOpenProvinceModal(!openProvinceModal)}
+                            visible={openProvinceModal}
+                            onTouchOutside={() => setOpenProvinceModal(!openProvinceModal)}
+                        >
+                            <ModalContent style={{ width: "100%", height: 310 }}>
+                                <ScrollView>
+                                    {VNProvince.map((p, idx) => (
+                                        <Pressable key={idx} onPress={() => { setProvinces(p.name) }}>
+                                            <ListItem >
+                                                <ListItem.Content>
+                                                    <Text> {p.name}</Text>
+                                                </ListItem.Content>
+                                            </ListItem>
+                                        </Pressable>
+
+                                    ))}
+                                </ScrollView>
+                            </ModalContent>
+                        </BottomModal>
+                    </>
+                )
+            }
+            {openOptionModal &&
+                (
+                    <>
+                        <BottomModal
+                            swipeThreshold={200}
+                            onBackdropPress={() => setOpenOptionModal(!openOptionModal)}
+                            swipeDirection={["up", "down"]}
+                            footer={
+                                <ModalFooter>
+                                    <ModalButton
+                                        text="Apply"
+                                        style={{
+                                            marginBottom: 20,
+                                            color: "white",
+                                            backgroundColor: "#003580",
+                                        }}
+                                        onPress={() => setOpenOptionModal(!openOptionModal)}
                                     />
                                 </ModalFooter>
                             }
@@ -120,9 +190,9 @@ const SearchBox = ({ navigation }) => {
                                     slideFrom: "bottom",
                                 })
                             }
-                            onHardwareBackPress={() => setmodalVisible(!modalVisible)}
-                            visible={modalVisible}
-                            onTouchOutside={() => setmodalVisible(!modalVisible)}
+                            onHardwareBackPress={() => setOpenOptionModal(!openOptionModal)}
+                            visible={openOptionModal}
+                            onTouchOutside={() => setOpenOptionModal(!openOptionModal)}
                         >
                             <ModalContent style={{ width: "100%", height: 310 }}>
                                 <View

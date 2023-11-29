@@ -4,7 +4,7 @@ import { CalendarList } from 'react-native-calendars';
 import moment from 'moment';
 const initialDate = moment().format('YYYY-MM-DD');
 
-const DateRangePicker = ({ hanldeCancel, handleSave }) => {
+const DateRangePicker = ({ hanldeCancel, handleSave, onStartDay, onEndDay }) => {
     const [startDay, setStartDay] = useState(initialDate);
     const [endDay, setEndDay] = useState(null);
     const [marked, setMarked] = useState({});
@@ -13,14 +13,19 @@ const DateRangePicker = ({ hanldeCancel, handleSave }) => {
         if (!startDay || (startDay && endDay)) {
             setStartDay(day.dateString);
             setEndDay(null);
+            onStartDay(day.dateString);
+            onEndDay(null)
         } else {
             // Chọn ngày kết thúc nếu đã có ngày bắt đầu
             if (moment(day.dateString).isSameOrAfter(startDay)) {
                 setEndDay(day.dateString);
                 setupMarkedDates(startDay, day.dateString);
+                onEndDay(day.dateString)
             } else {
                 setStartDay(day.dateString);
                 setEndDay(null);
+                onStartDay(day.dateString);
+                onEndDay(null)
             }
         }
     }

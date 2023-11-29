@@ -32,7 +32,7 @@ const Home = ({ navigation }) => {
                             <Card.Image
                                 style={{ padding: 0, borderRadius: 8, height: 200, }}
                                 source={require('../../assets/images/Hotel.png')}
-                           
+
                             />
                             <Text style={{ ...styles.title, textAlign: "center", fontSize: 16 }}>
                                 Taian Hotel & Apartment

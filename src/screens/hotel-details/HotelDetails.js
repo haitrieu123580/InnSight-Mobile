@@ -16,10 +16,28 @@ import { FontAwesome5 } from "@expo/vector-icons";
 // import PropertyCard from "../../components/property-card/PropertyCard";
 import Room from "../../components/room/Room";
 import { Button } from "@rneui/base";
-const HotelDetails = () => {
-    const route = useRoute();
+import { useDispatch, useSelector } from "react-redux";
+import HotelAction from "../../redux/hotel/action";
+const HotelDetails = ({ route }) => {
+    // const route = useRoute();
+    const { hotelId } = route.params;
+    const { hotel } = useSelector(state => state.Hotel)
+    const dispatch = useDispatch();
+    useEffect(() => {
+        if (hotelId) {
+            dispatch({
+                type: HotelAction.GET_HOTEL,
+                hotelId: hotelId,
+                onSuccess: () => {
+                },
+                onError: () => {
+                }
+            });
+
+        }
+    }, [hotelId])
     const navigation = useNavigation();
-    const [hotelSelected, setHotelSelected] = useState(MockHotelData)
+    const [hotelSelected, setHotelSelected] = useState(hotel)
     const [modalVisibile, setModalVisibile] = useState(false);
     const [selectedFilter, setSelectedFilter] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0)
@@ -38,6 +56,11 @@ const HotelDetails = () => {
             },
         });
     }, []);
+    // useEffect(() => {
+    //     if (hotel) {
+    //         setHotelSelected(hotel)
+    //     }
+    // }, [hotel])
     return (
         <>
             <ScrollView style={{ backgroundColor: "white", padding: 10 }}>
@@ -81,7 +104,7 @@ const HotelDetails = () => {
                 <ScrollView >
                     {/* hotel images */}
                     <View style={styles.section}>
-                        {hotelSelected?.hotelImages?.map((image, idx) => (
+                        {hotel?.hotelImages?.map((image, idx) => (
                             <Image key={idx} />
                         ))}
                     </View>
@@ -89,12 +112,12 @@ const HotelDetails = () => {
                     <View style={styles.section}>
                         <Text style={styles.label}>Giới thiệu cơ sở lưu trú</Text>
                         <Text>
-                            {hotelSelected?.description}
+                            {hotel?.description}
                         </Text>
                     </View>
                     {/* room list */}
                     <View style={styles.section}>
-                        {hotelSelected?.roomList?.map((room, idx) => (
+                        {hotel?.roomList?.map((room, idx) => (
                             <Room key={idx} room={room} />
                         ))}
                     </View>

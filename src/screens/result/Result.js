@@ -1,22 +1,25 @@
 import { StyleSheet, Text, View, Image, ScrollView } from 'react-native'
 import React from 'react'
 import Icon from 'react-native-vector-icons/MaterialIcons';
-
-import { Card } from '@rneui/themed';
-
 import mockData from '../../redux/hotel/mock-data/HotelResult'
 import { Button } from '@rneui/base';
+import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
 const Result = ({ navigation }) => {
-    const handleSelectHotel = () => {
-        navigation.navigate('Hotel')
+    const { result } = useSelector(state => state.Hotel)
+    useEffect(() => {
+
+    }, [result])
+    const handleSelectHotel = (id) => {
+        navigation.navigate('Hotel', { hotelId: id })
     }
     return (
         <ScrollView style={{ backgroundColor: "#fff", padding: 10 }}>
-            <Text>{mockData?.totalItems} Chỗ nghỉ</Text>
+            <Text>{result?.totalItems} Chỗ nghỉ</Text>
             <View style={styles.resultList}>
-                {mockData?.hotels?.map((result, idx) => (
+                {result?.hotels?.map((result, idx) => (
                     <View key={idx} style={styles.resultBlock}>
-                        <View style={{ ...styles.imageWrapper, backgroundColor: 'red' }}>
+                        <View style={{ ...styles.imageWrapper, backgroundColor: 'gray' }}>
                             <Image
                                 source={{ uri: result?.hotelImgPath }}
                                 style={{ ...styles.image, resizeMode: 'cover' }}
@@ -55,7 +58,7 @@ const Result = ({ navigation }) => {
                                         backgroundColor: "#E67E03"
                                     }
                                 }
-                                onPress={handleSelectHotel}
+                                onPress={(event) => { event.preventDefault(); handleSelectHotel(result?.id) }}
                             >
                                 Chọn phòng
                             </Button>
