@@ -1,12 +1,31 @@
 import { FlatList, StyleSheet, Text, View, Pressable, TextInput } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button, Card } from '@rneui/base'
 import { FontAwesome5 } from "@expo/vector-icons";
 import { ModalContent, BottomModal, ModalFooter, ModalButton, ModalTitle } from 'react-native-modals';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { addRoomToCart } from "../../redux/booking/slice"
 const Room = ({ room }) => {
+    const { hotel } = useSelector(state => state.Hotel);
+    const dispatch = useDispatch();
     const [modalVisible, setModalVisible] = useState(false);
-    const [rooms, setRooms] = useState(0)
+    const [quantity, setQuantity] = useState(0);
+    useEffect(() => {
+
+    }, [hotel])
+    const handleAddRoomToCart = () => {
+        console.log(quantity)
+        dispatch({
+            type: addRoomToCart,
+            payload: {
+                hotel: hotel,
+                room: room,
+                count: quantity,
+
+            }
+        })
+    }
+
     return (
         <>
             <View >
@@ -52,7 +71,7 @@ const Room = ({ room }) => {
                                     <TextInput
                                         placeholderTextColor="orange"
                                         editable={false}
-                                        placeholder={` ${rooms}`}
+                                        placeholder={` ${quantity}`}
                                     />
                                 </Pressable>
                             </View>
@@ -70,6 +89,7 @@ const Room = ({ room }) => {
                                         width: 100
                                     }
                                 }
+                                onPress={(event) => { event.preventDefault(); handleAddRoomToCart(); }}
                             >Chọn</Button>
                         </View>
                     </View>
@@ -111,7 +131,7 @@ const Room = ({ room }) => {
                             style={{ flexDirection: "row", alignItems: "center", gap: 10 }}
                         >
                             <Pressable
-                                onPress={() => setRooms(Math.max(0, rooms - 1))}
+                                onPress={() => setQuantity(Math.max(0, quantity - 1))}
                                 style={{
                                     width: 26,
                                     height: 26,
@@ -141,12 +161,12 @@ const Room = ({ room }) => {
                                         paddingHorizontal: 6,
                                     }}
                                 >
-                                    {rooms}
+                                    {quantity}
                                 </Text>
                             </Pressable>
 
                             <Pressable
-                                onPress={() => setRooms((c) => Math.min(room.quantity, rooms + 1))}
+                                onPress={() => setQuantity((c) => Math.min(room.quantity, quantity + 1))}
                                 style={{
                                     width: 26,
                                     height: 26,

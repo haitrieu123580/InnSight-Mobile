@@ -8,9 +8,9 @@ import MockHotelData from '../../redux/hotel/mock-data/HotelDetails'
 import { Pressable, ScrollView, StyleSheet, Text, View, Image, TextInput } from "react-native";
 import React, { useLayoutEffect, useState, useEffect } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { Octicons } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
-import { FontAwesome5 } from "@expo/vector-icons";
+// import { Octicons } from "@expo/vector-icons";
+// import { Ionicons } from "@expo/vector-icons";
+// import { FontAwesome5 } from "@expo/vector-icons";
 // import { FontAwesome } from '@expo/vector-icons';
 // import { Entypo } from "@expo/vector-icons";
 // import PropertyCard from "../../components/property-card/PropertyCard";
@@ -19,15 +19,19 @@ import { Button } from "@rneui/base";
 import { useDispatch, useSelector } from "react-redux";
 import HotelAction from "../../redux/hotel/action";
 const HotelDetails = ({ route }) => {
-    // const route = useRoute();
     const { hotelId } = route.params;
-    const { hotel } = useSelector(state => state.Hotel)
+    const { hotel, searchParams } = useSelector(state => state.Hotel)
+    const { cart } = useSelector(state => state.Booking)
+
     const dispatch = useDispatch();
+
     useEffect(() => {
         if (hotelId) {
             dispatch({
                 type: HotelAction.GET_HOTEL,
                 hotelId: hotelId,
+                checkInDay: searchParams.checkinDay,
+                checkOutDay: searchParams.checkoutDay,
                 onSuccess: () => {
                 },
                 onError: () => {
@@ -36,15 +40,10 @@ const HotelDetails = ({ route }) => {
 
         }
     }, [hotelId])
-    const navigation = useNavigation();
-    const [hotelSelected, setHotelSelected] = useState(hotel)
-    const [modalVisibile, setModalVisibile] = useState(false);
-    const [selectedFilter, setSelectedFilter] = useState([]);
-    const [totalPrice, setTotalPrice] = useState(0)
     useLayoutEffect(() => {
         navigation.setOptions({
             headerShown: true,
-            title: "Hotel",
+            title: hotel?.hotelName || "Hotel",
             headerTitleStyle: {
                 fontSize: 20,
                 fontWeight: "bold",
@@ -55,12 +54,25 @@ const HotelDetails = ({ route }) => {
                 shadowColor: "transparent",
             },
         });
-    }, []);
-    // useEffect(() => {
-    //     if (hotel) {
-    //         setHotelSelected(hotel)
-    //     }
-    // }, [hotel])
+    }, [hotel]);
+    const navigation = useNavigation();
+    const [modalVisibile, setModalVisibile] = useState(false);
+    const [selectedFilter, setSelectedFilter] = useState([]);
+    const [totalPrice, setTotalPrice] = useState(0)
+
+    useEffect(() => {
+        if (cart?.rooms?.length) {
+            const total = cart.rooms.reduce((acc, room) => (
+                acc + (room?.price * parseInt(room?.count || 0, 10))
+            ), 0);
+            setTotalPrice(total)
+        }
+    }, [cart]);
+    const handleGotoBooking = () => {
+        if (totalPrice) {
+            navigation.navigate('Booking')
+        }
+    }
     return (
         <>
             <ScrollView style={{ backgroundColor: "white", padding: 10 }}>
@@ -84,7 +96,7 @@ const HotelDetails = ({ route }) => {
                         </Text>
                     </Pressable> */}
 
-                    <Pressable style={{ flexDirection: "row", alignItems: "center" }}>
+                    {/* <Pressable style={{ flexDirection: "row", alignItems: "center" }}>
                         <Ionicons name="filter" size={22} color="gray" />
                         <Text style={{ fontSize: 15, fontWeight: "500", marginLeft: 8 }}>
                             Price
@@ -98,7 +110,7 @@ const HotelDetails = ({ route }) => {
                         <Text style={{ fontSize: 15, fontWeight: "500", marginLeft: 8 }}>
                             Map
                         </Text>
-                    </Pressable>
+                    </Pressable> */}
                 </Pressable>
 
                 <ScrollView >
@@ -117,7 +129,7 @@ const HotelDetails = ({ route }) => {
                     </View>
                     {/* room list */}
                     <View style={styles.section}>
-                        {hotel?.roomList?.map((room, idx) => (
+                        {MockHotelData?.roomList?.map((room, idx) => (
                             <Room key={idx} room={room} />
                         ))}
                     </View>
@@ -144,11 +156,6 @@ const HotelDetails = ({ route }) => {
                         </ModalFooter>
                     }
                     modalTitle={<ModalTitle title="Sort and Filter" />}
-                    modalAnimation={
-                        new SlideAnimation({
-                            slideFrom: "bottom",
-                        })
-                    }
                     onHardwareBackPress={() => setModalVisibile(!modalVisibile)}
                     visible={modalVisibile}
                     onTouchOutside={() => setModalVisibile(!modalVisibile)}
@@ -189,8 +196,9 @@ const HotelDetails = ({ route }) => {
                             backgroundColor: "#EBB97E"
                         }
                     }
-                    onPress={() => {
-                        navigation.navigate('Booking')
+                    onPress={(event) => {
+                        event.preventDefault();
+                        handleGotoBooking();
                     }}
                 >
                     Đặt phòng

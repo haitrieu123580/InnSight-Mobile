@@ -1,7 +1,19 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-
+import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import Const from '../../utils/Constants'
 const ReservationPrice = () => {
+    const { cart } = useSelector(state => state.Booking)
+    const [totalPrice, setTotalPrice] = useState(0)
+    useEffect(() => {
+        if (cart?.rooms?.length) {
+            const total = cart.rooms.reduce((acc, room) => (
+                acc + (room?.price * parseInt(room?.count || 0, 10))
+            ), 0);
+            const totalWithTax = total + total * Const.tax / 100;
+            setTotalPrice(totalWithTax.toFixed(3))
+        }
+    }, [cart]);
     return (
         <View style={[styles.card, styles.elevation]}>
             <View style={{ ...styles.flex, justifyContent: "space-between" }}>
@@ -9,11 +21,18 @@ const ReservationPrice = () => {
                     Thành tiền
                 </Text>
                 <Text style={{ ...styles.heading, color: "red" }}>
-                    {`VND`}
+                    {`${totalPrice} VND`}
                 </Text>
             </View>
-            <View>
-        
+            {cart.rooms?.map((room, idx) => (
+                <View key={idx} style={styles.flex}>
+                    <Text>{`(${room?.count})x ${room?.roomName}`}</Text>
+                    <Text>{`${room?.price} VND`}</Text>
+                </View>
+            ))}
+            <View style={styles.flex}>
+                <Text>{`Thuế và phí`}</Text>
+                <Text>{`${Const.tax}%`}</Text>
             </View>
         </View>
     )
@@ -41,6 +60,7 @@ const styles = StyleSheet.create({
     },
     flex: {
         display: "flex",
-        flexDirection: "row"
+        flexDirection: "row",
+        justifyContent: "space-between"
     },
 })

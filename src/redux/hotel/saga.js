@@ -1,6 +1,6 @@
 import { all, call, fork, put, takeEvery } from '@redux-saga/core/effects';
 import actions from './action';
-import { result, getHotel } from './slice';
+import { result, getHotel, setSearchParams } from './slice';
 import { searchHotels, getHotelById } from '../../api/ApiHotel'
 function* watchSearch() {
     yield takeEvery(actions.SEARCH_HOTELS_START, function* (payload) {
@@ -22,6 +22,7 @@ function* watchSearch() {
 
 
         try {
+            yield put(setSearchParams(data))
             const response = yield call(searchHotels, data);
             yield put(result(response?.Data))
             onSuccess && onSuccess();
@@ -34,10 +35,10 @@ function* watchSearch() {
 }
 function* watchGetHotel() {
     yield takeEvery(actions.GET_HOTEL, function* (payload) {
-        const { hotelId, onSuccess, onError } = payload
+        const { hotelId, checkInDay, checkOutDay, onSuccess, onError } = payload
         try {
-            const response = yield call(getHotelById, hotelId);
-            console.log(response)
+            const response = yield call(getHotelById, { hotelId: hotelId, checkInDay: checkInDay, checkOutDay: checkOutDay });
+
 
             if (response?.Data) {
                 yield put(getHotel(response?.Data))

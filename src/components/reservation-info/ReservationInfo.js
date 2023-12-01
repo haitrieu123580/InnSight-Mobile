@@ -2,7 +2,10 @@ import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Image } from '@rneui/base';
-const ReservationInfo = (room) => {
+import { useSelector } from 'react-redux';
+const ReservationInfo = () => {
+    const { cart } = useSelector(state => state.Booking)
+    const { searchParams } = useSelector(state => state.Hotel)
     return (
         <View style={[styles.card, styles.elevation]}>
             <View style={{ ...styles.flex, justifyContent: "space-between" }}>
@@ -16,47 +19,38 @@ const ReservationInfo = (room) => {
                 <View style={{ width: "70%", height: "100%", }}>
                     <View style={styles.flex}>
                         <FontAwesome5 name="hotel" size={22} />
-                        <Text style={{ fontSize: 22, marginLeft: 10, fontWeight: "700" }}>{"hotel"}</Text>
+                        <Text style={{ fontSize: 22, marginLeft: 10, fontWeight: "700" }}>
+                            {cart?.hotel?.hotelName}
+                        </Text>
                     </View>
                     <Text>
-                        {room?.address || "address"}
+                        {cart?.hotel?.address || "address"}
                     </Text>
                     <View style={{ ...styles.flex, justifyContent: "space-between" }}>
                         <Text style={styles.textGray}>Ngày nhận phòng</Text>
-                        <Text>...</Text>
+                        <Text>{searchParams?.checkinDay}</Text>
                     </View>
                     <View style={{ ...styles.flex, justifyContent: "space-between" }}>
                         <Text style={styles.textGray}>Ngày nhận phòng</Text>
-                        <Text>...</Text>
+                        <Text>{searchParams?.checkinDay}</Text>
                     </View>
                 </View>
             </View>
-            <View style={{ marginTop: 10 }}>
-                <Text style={{ fontSize: 18, fontWeight: "700" }}>
-                    Phòng
-                </Text>
-                <View style={{ ...styles.flex, justifyContent: "space-between" }}>
-                    <Text style={styles.textGray}>Khách/Phòng</Text>
-                    <Text>...</Text>
+            {cart?.rooms?.map((room, idx) => (
+                <View style={{ marginTop: 10 }} key={idx}>
+                    <Text style={{ fontSize: 18, fontWeight: "700" }}>
+                        {`(${room?.count}x) ${room?.roomName}`}
+                    </Text>
+                    <View style={{ ...styles.flex, justifyContent: "space-between" }}>
+                        <Text style={styles.textGray}>Khách/Phòng</Text>
+                        <Text>{`${room?.adult} người lớn - ${room?.children} trẻ em`}</Text>
+                    </View>
+                    {/* <View style={{ ...styles.flex, justifyContent: "space-between" }}>
+                        <Text style={styles.textGray}>Kiểu giường</Text>
+                        <Text>...</Text>
+                    </View> */}
                 </View>
-                <View style={{ ...styles.flex, justifyContent: "space-between" }}>
-                    <Text style={styles.textGray}>Kiểu giường</Text>
-                    <Text>...</Text>
-                </View>
-            </View>
-            <View style={{ marginTop: 10 }}>
-                <Text style={{ fontSize: 18, fontWeight: "700" }}>
-                    Phòng
-                </Text>
-                <View style={{ ...styles.flex, justifyContent: "space-between" }}>
-                    <Text style={styles.textGray}>Khách/Phòng</Text>
-                    <Text>...</Text>
-                </View>
-                <View style={{ ...styles.flex, justifyContent: "space-between" }}>
-                    <Text style={styles.textGray}>Kiểu giường</Text>
-                    <Text>...</Text>
-                </View>
-            </View>
+            ))}
         </View>
     )
 }
