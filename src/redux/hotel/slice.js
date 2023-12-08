@@ -18,6 +18,11 @@ const initialState = {
         review: null,
         pageIndex: null,
         pageSize: null
+    },
+    cart: {
+        hotel: null,
+        rooms: [],
+        totalPriceWithoutTax: null,
     }
 }
 
@@ -30,6 +35,11 @@ const hotelSlice = createSlice({
         },
         getHotel: (state, { payload }) => {
             state.hotel = payload
+            state.cart = {
+                hotel: null,
+                rooms: [],
+                totalPriceWithoutTax: null,
+            }
         },
         setSearchParams: (state, { payload }) => {
             state.searchParams = {
@@ -46,12 +56,31 @@ const hotelSlice = createSlice({
                 pageIndex: payload?.pageIndex,
                 pageSize: payload?.pageSize
             }
-        }
+        },
+        addRoomToCart: (state, { payload }) => {
+            const { hotel, room, count, onSuccess } = payload;
+            const existingRoomIndex = state.cart.rooms.findIndex((r) => r?.id === room?.id);
+            if (existingRoomIndex !== -1) {
+                state.cart.rooms[existingRoomIndex].count = count;
+            } else {
+                state.cart = {
+                    hotel: hotel,
+                    rooms: [
+                        ...state.cart.rooms,
+                        {
+                            ...room,
+                            count: count,
+                        },
+                    ],
+                };
+            }
+            onSuccess && onSuccess();
+        },
     },
 
 })
 
 
-export const { result, getHotel, setSearchParams } = hotelSlice.actions
+export const { result, getHotel, setSearchParams, addRoomToCart } = hotelSlice.actions
 
 export default hotelSlice.reducer

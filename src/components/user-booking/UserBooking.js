@@ -3,7 +3,7 @@ import React from 'react'
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Image } from '@rneui/base';
 import { useSelector } from 'react-redux';
-const ReservationInfo = () => {
+const UserBooking = () => {
     // const { cart } = useSelector(state => state.Booking)
     const { searchParams, cart } = useSelector(state => state.Hotel)
     return (
@@ -55,7 +55,7 @@ const ReservationInfo = () => {
     )
 }
 
-export default ReservationInfo
+export default UserBooking
 
 const styles = StyleSheet.create({
     flex: {

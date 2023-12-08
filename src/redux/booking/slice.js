@@ -4,11 +4,11 @@ const calTotalPrice = (cart) => {
 
 }
 const initialState = {
-    cart: {
-        hotel: null,
-        rooms: [],
-        totalPriceWithoutTax: null,
-    },
+    // cart: {
+    //     hotel: null,
+    //     rooms: [],
+    //     totalPriceWithoutTax: null,
+    // },
     reservation: {
     },
     checkIn: "",
@@ -27,25 +27,25 @@ const bookingSlice = createSlice({
             state.checkIn = checkIn;
             state.checkOut = checkOut;
         },
-        addRoomToCart: (state, { payload }) => {
-            const { hotel, room, count, onSuccess } = payload;
-            const existingRoomIndex = state.cart.rooms.findIndex((r) => r?.id === room?.id);
-            if (existingRoomIndex !== -1) {
-                state.cart.rooms[existingRoomIndex].count = count;
-            } else {
-                state.cart = {
-                    hotel: hotel,
-                    rooms: [
-                        ...state.cart.rooms,
-                        {
-                            ...room,
-                            count: count,
-                        },
-                    ],
-                };
-            }
-            onSuccess && onSuccess();
-        },
+        // addRoomToCart: (state, { payload }) => {
+        //     const { hotel, room, count, onSuccess } = payload;
+        //     const existingRoomIndex = state.cart.rooms.findIndex((r) => r?.id === room?.id);
+        //     if (existingRoomIndex !== -1) {
+        //         state.cart.rooms[existingRoomIndex].count = count;
+        //     } else {
+        //         state.cart = {
+        //             hotel: hotel,
+        //             rooms: [
+        //                 ...state.cart.rooms,
+        //                 {
+        //                     ...room,
+        //                     count: count,
+        //                 },
+        //             ],
+        //         };
+        //     }
+        //     onSuccess && onSuccess();
+        // },
         booking: (state, { payload }) => {
             state.bookingReserved = payload
         },

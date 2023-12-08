@@ -24,6 +24,7 @@
     "react-native-autocomplete-input": "^5.4.0",
     "react-native-calendars": "^1.1302.0",
     "react-native-date-ranges": "^2.5.0",
+    "react-native-dotenv": "^3.4.9",
     "react-native-modals": "^0.22.3",
     "react-native-navigation": "^7.37.1",
     "react-native-vector-icons": "^10.0.2",

@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import Const from '../../utils/Constants'
 const ReservationPrice = () => {
-    const { cart } = useSelector(state => state.Booking)
+    // const { cart } = useSelector(state => state.Booking)
+    const { cart } = useSelector(state => state.Hotel)
     const [totalPrice, setTotalPrice] = useState(0)
     useEffect(() => {
         if (cart?.rooms?.length) {

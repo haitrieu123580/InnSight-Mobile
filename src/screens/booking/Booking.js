@@ -6,11 +6,14 @@ import ReservationPrice from '../../components/reservation-price/ReservationPric
 import { TextInput } from 'react-native';
 import { Input } from '@rneui/themed';
 import { Button } from '@rneui/base';
+import { useSelector } from 'react-redux';
 const Booking = () => {
     const navigation = useNavigation();
     const [fullName, setFullName] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [email, setEmail] = useState('');
+    // const { cart } = useSelector(state => state.Booking)
+    const { searchParams, cart } = useSelector(state => state.Hotel)
     useLayoutEffect(() => {
         navigation.setOptions({
             headerShown: true,
@@ -28,9 +31,30 @@ const Booking = () => {
         });
     }, []);
     const onSubmitReservation = () => {
-        console.log('Full Name:', fullName);
-        console.log('Phone Number:', phoneNumber);
-        console.log('Email:', email);
+        console.log('Bookking:', cart);
+        // console.log('Phone Number:', phoneNumber);
+        // console.log('Email:', email);
+        const reservation = {
+            hotelId: cart?.hotelId,
+            note: "",
+            name: fullName,
+            email: email,
+            phoneNumber: phoneNumber,
+            paymentMethod: "Cash",
+            roomTypeReservedList: [
+                {
+                    "id": 1,
+                    "count": 1,
+                    "price": 123.456
+                }
+            ],
+            totalPrice: 4000.00,
+            tax: 6000,
+            vat: 222,
+            startDay: searchParams?.checkinDay,
+            endDay: searchParams?.checkoutDay
+        }
+        navigation.navigate('Reservation')
     }
     return (
         <ScrollView style={styles.bgWhite}>

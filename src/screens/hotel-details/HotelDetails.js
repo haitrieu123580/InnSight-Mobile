@@ -20,9 +20,12 @@ import { useDispatch, useSelector } from "react-redux";
 import HotelAction from "../../redux/hotel/action";
 const HotelDetails = ({ route }) => {
     const { hotelId } = route.params;
-    const { hotel, searchParams } = useSelector(state => state.Hotel)
-    const { cart } = useSelector(state => state.Booking)
-
+    const { hotel, searchParams, cart } = useSelector(state => state.Hotel)
+    // const { cart } = useSelector(state => state.Booking)
+    const navigation = useNavigation();
+    const [modalVisibile, setModalVisibile] = useState(false);
+    const [selectedFilter, setSelectedFilter] = useState([]);
+    const [totalPrice, setTotalPrice] = useState(0)
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -37,9 +40,20 @@ const HotelDetails = ({ route }) => {
                 onError: () => {
                 }
             });
-
         }
-    }, [hotelId])
+    }, [hotelId]);
+    useEffect(() => {
+        console.log(cart?.rooms)
+        if (cart?.rooms?.length) {
+            const total = cart.rooms.reduce((acc, room) => (
+                acc + (room?.price * parseInt(room?.count || 0, 10))
+            ), 0);
+            setTotalPrice(total);
+        }
+        else {
+            setTotalPrice(0)
+        }
+    }, [cart, hotel]);
     useLayoutEffect(() => {
         navigation.setOptions({
             headerShown: true,
@@ -55,19 +69,16 @@ const HotelDetails = ({ route }) => {
             },
         });
     }, [hotel]);
-    const navigation = useNavigation();
-    const [modalVisibile, setModalVisibile] = useState(false);
-    const [selectedFilter, setSelectedFilter] = useState([]);
-    const [totalPrice, setTotalPrice] = useState(0)
 
-    useEffect(() => {
-        if (cart?.rooms?.length) {
-            const total = cart.rooms.reduce((acc, room) => (
-                acc + (room?.price * parseInt(room?.count || 0, 10))
-            ), 0);
-            setTotalPrice(total)
-        }
-    }, [cart]);
+
+    // useEffect(() => {
+    //     if (cart?.rooms?.length) {
+    //         const total = cart.rooms.reduce((acc, room) => (
+    //             acc + (room?.price * parseInt(room?.count || 0, 10))
+    //         ), 0);
+    //         setTotalPrice(total)
+    //     }
+    // }, [cart]);
     const handleGotoBooking = () => {
         if (totalPrice) {
             navigation.navigate('Booking')

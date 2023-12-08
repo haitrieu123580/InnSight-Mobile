@@ -4,7 +4,7 @@ import { Button, Card } from '@rneui/base'
 import { FontAwesome5 } from "@expo/vector-icons";
 import { ModalContent, BottomModal, ModalFooter, ModalButton, ModalTitle } from 'react-native-modals';
 import { useDispatch, useSelector } from 'react-redux';
-import { addRoomToCart } from "../../redux/booking/slice"
+import { addRoomToCart } from "../../redux/hotel/slice"
 const Room = ({ room }) => {
     const { hotel } = useSelector(state => state.Hotel);
     const dispatch = useDispatch();
@@ -14,7 +14,6 @@ const Room = ({ room }) => {
 
     }, [hotel])
     const handleAddRoomToCart = () => {
-        console.log(quantity)
         dispatch({
             type: addRoomToCart,
             payload: {

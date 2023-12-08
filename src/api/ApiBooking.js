@@ -1,5 +1,6 @@
 import axios from "axios";
-const BASE_URL = 'https://deploy-api-booking-production.up.railway.app' + "/api"
+import { API_URL } from '@env';
+const BASE_URL = API_URL + "/api"
 
 const config = {
     headers: {
