@@ -3,17 +3,21 @@ import React, { useLayoutEffect, useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import ReservationInfo from '../../components/reservation-info/ReservationInfo'
 import ReservationPrice from '../../components/reservation-price/ReservationPrice'
-import { TextInput } from 'react-native';
 import { Input } from '@rneui/themed';
 import { Button } from '@rneui/base';
 import { useSelector } from 'react-redux';
+import Constants from '../../utils/Constants';
+import { useDispatch } from 'react-redux';
+import { saveReservation } from '../../redux/booking/slice';
 const Booking = () => {
     const navigation = useNavigation();
+    const dispatch = useDispatch();
     const [fullName, setFullName] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [email, setEmail] = useState('');
     // const { cart } = useSelector(state => state.Booking)
     const { searchParams, cart } = useSelector(state => state.Hotel)
+
     useLayoutEffect(() => {
         navigation.setOptions({
             headerShown: true,
@@ -31,30 +35,42 @@ const Booking = () => {
         });
     }, []);
     const onSubmitReservation = () => {
-        console.log('Bookking:', cart);
-        // console.log('Phone Number:', phoneNumber);
-        // console.log('Email:', email);
+        const total = cart.rooms.reduce((acc, room) => (
+            acc + (room?.price * parseInt(room?.count || 0, 10))
+        ), 0);
+        const totalWithTax = total + total * Constants.tax / 100;
         const reservation = {
-            hotelId: cart?.hotelId,
+            hotelId: cart?.hotel?.id,
             note: "",
             name: fullName,
             email: email,
             phoneNumber: phoneNumber,
-            paymentMethod: "Cash",
-            roomTypeReservedList: [
-                {
-                    "id": 1,
-                    "count": 1,
-                    "price": 123.456
-                }
-            ],
+            paymentMethod: "cash",
+            roomTypeReservedList: cart?.rooms.map(item => ({
+                id: item.id,
+                count: parseInt(item.count),
+                price: item.price
+            })),
             totalPrice: 4000.00,
             tax: 6000,
             vat: 222,
+            totalPrice: total,
+            tax: Constants.tax,
+            vat: parseFloat(totalWithTax.toFixed(3)),
             startDay: searchParams?.checkinDay,
             endDay: searchParams?.checkoutDay
         }
-        navigation.navigate('Reservation')
+        if (fullName && email && phoneNumber) {
+            dispatch(saveReservation(
+                {
+                    reservation: reservation,
+                }
+            ))
+            navigation.navigate('Reservation')
+
+        }
+
+
     }
     return (
         <ScrollView style={styles.bgWhite}>

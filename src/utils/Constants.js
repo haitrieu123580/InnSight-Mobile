@@ -1,4 +1,4 @@
-const Contanst = {
+const Constants = {
     tax: 10
 }
-export default Contanst
+export default Constants

@@ -3,54 +3,34 @@ import React from 'react'
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Image } from '@rneui/base';
 import { useSelector } from 'react-redux';
+import { Input } from '@rneui/themed';
 const UserBooking = () => {
     // const { cart } = useSelector(state => state.Booking)
-    const { searchParams, cart } = useSelector(state => state.Hotel)
+    const { reservation } = useSelector(state => state.Booking)
     return (
         <View style={[styles.card, styles.elevation]}>
-            <View style={{ ...styles.flex, justifyContent: "space-between" }}>
-                <View style={{ width: "20%", height: "100%", }}>
-                    <Image
-                        source={{ uri: 'https://source.unsplash.com/random?sig=2' }}
-                        containerStyle={styles.image}
-                    />
-                </View>
-
-                <View style={{ width: "70%", height: "100%", }}>
-                    <View style={styles.flex}>
-                        <FontAwesome5 name="hotel" size={22} />
-                        <Text style={{ fontSize: 22, marginLeft: 10, fontWeight: "700" }}>
-                            {cart?.hotel?.hotelName}
-                        </Text>
-                    </View>
-                    <Text>
-                        {cart?.hotel?.address || "address"}
-                    </Text>
-                    <View style={{ ...styles.flex, justifyContent: "space-between" }}>
-                        <Text style={styles.textGray}>Ngày nhận phòng</Text>
-                        <Text>{searchParams?.checkinDay}</Text>
-                    </View>
-                    <View style={{ ...styles.flex, justifyContent: "space-between" }}>
-                        <Text style={styles.textGray}>Ngày trả phòng</Text>
-                        <Text>{searchParams?.checkoutDay}</Text>
-                    </View>
-                </View>
-            </View>
-            {cart?.rooms?.map((room, idx) => (
-                <View style={{ marginTop: 10 }} key={idx}>
-                    <Text style={{ fontSize: 18, fontWeight: "700" }}>
-                        {`(${room?.count}x) ${room?.roomName}`}
-                    </Text>
-                    <View style={{ ...styles.flex, justifyContent: "space-between" }}>
-                        <Text style={styles.textGray}>Khách/Phòng</Text>
-                        <Text>{`${room?.adult} người lớn - ${room?.children} trẻ em`}</Text>
-                    </View>
-                    {/* <View style={{ ...styles.flex, justifyContent: "space-between" }}>
-                        <Text style={styles.textGray}>Kiểu giường</Text>
-                        <Text>...</Text>
-                    </View> */}
-                </View>
-            ))}
+            <Input
+                value={reservation?.name}
+                label="Họ và tên"
+                labelStyle={styles.labelStyle}
+                inputContainerStyle={styles.inputStyle}
+                disabled={true}
+            />
+            <Input
+                label="Số điện thoại"
+                value={reservation?.phoneNumber}
+                labelStyle={styles.labelStyle}
+                inputContainerStyle={styles.inputStyle}
+                onChangeText={(text) => setPhoneNumber(text)}
+                disabled={true}
+            />
+            <Input
+                value={reservation?.email}
+                labelStyle={styles.labelStyle}
+                inputContainerStyle={styles.inputStyle}
+                onChangeText={(text) => setEmail(text)}
+                disabled={true}
+            />
         </View>
     )
 }
@@ -79,13 +59,20 @@ const styles = StyleSheet.create({
         elevation: 10,
         shadowColor: 'rgba(0, 0, 0, 1);',
     },
-    image: {
-        aspectRatio: 1,
-        width: '100%',
-        flex: 1,
-    },
+
     textGray: {
         color: "gray",
         fontSize: 14,
+    },
+    labelStyle: {
+        color: "black"
+    },
+    inputStyle: {
+        borderWidth: 1,
+        borderRadius: 5
+    },
+    button: {
+        backgroundColor: "#E65300",
+        // borderRadius: 5
     }
 })

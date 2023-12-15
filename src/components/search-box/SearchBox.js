@@ -15,6 +15,8 @@ import { ModalContent } from "react-native-modals";
 import { ListItem } from '@rneui/base';
 import { useDispatch } from 'react-redux';
 import HotelAction from '../../redux/hotel/action';
+import DatePicker from "react-native-date-ranges";
+
 const SearchBox = ({ navigation }) => {
     const [openDateModal, setOpenDateModal] = useState(false);
     const [openOptionModal, setOpenOptionModal] = useState(false);
@@ -25,6 +27,8 @@ const SearchBox = ({ navigation }) => {
     const [children, setChildren] = useState(0);
     const [startDay, setStartDay] = useState(null);
     const [endDay, setEndDay] = useState(null)
+    // const [selectedDates, setSelectedDates] = useState();
+
     const dispatch = useDispatch();
     const search = () => {
         if (!provinces && !startDay && !endDay) {
@@ -70,6 +74,40 @@ const SearchBox = ({ navigation }) => {
                         editable={false}
                         placeholder={`${startDay || "Check-in"} -  ${endDay || "Check-out"}`}
                     />
+                    {/* <DatePicker
+                        style={{
+                            width: 350,
+                            height: 30,
+                            borderRadius: 0,
+                            borderWidth: 0,
+                            borderColor: "transparent",
+                        }}
+                        customStyles={{
+                            placeholderText: {
+                                fontSize: 15,
+                                flexDirection: "row",
+                                alignItems: "center",
+                                marginRight: "auto",
+                            },
+                            headerStyle: {
+                                backgroundColor: "#003580",
+                            },
+                            contentText: {
+                                fontSize: 15,
+                                flexDirection: "row",
+                                alignItems: "center",
+                                marginRight: "auto",
+                            },
+                        }}
+                        selectedBgColor="#0047AB"
+                        // customButton={(onConfirm) => customButton(onConfirm)}
+                        onConfirm={(startDate, endDate) =>
+                            setSelectedDates(startDate, endDate)
+                        }
+                        allowFontScaling={false}
+                        placeholder={"Select Your Dates"}
+                        mode={"range"}
+                    /> */}
                 </Pressable>
 
             </View>
@@ -117,6 +155,7 @@ const SearchBox = ({ navigation }) => {
                     >
                         <ModalContent style={{ width: "100%", height: 310 }}>
                             <DateRangePicker handleSave={() => setOpenDateModal(openDateModal)} onEndDay={setEndDay} onStartDay={setStartDay} />
+
                         </ModalContent>
                     </BottomModal>
                 </>

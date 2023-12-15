@@ -11,7 +11,6 @@ const Room = ({ room }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [quantity, setQuantity] = useState(0);
     useEffect(() => {
-
     }, [hotel])
     const handleAddRoomToCart = () => {
         dispatch({
@@ -34,10 +33,9 @@ const Room = ({ room }) => {
                     <View style={styles.hotelImage}>
                         <Card style={{ padding: 0 }}>
                             <Card.Image
-
-                            // source={{
-                            //     uri: room?.roomImage || ""
-                            // }}
+                                source={{
+                                    uri: room?.roomImage || ""
+                                }}
                             />
                             {room?.roomAmenities?.map((amenity, idx) => (
                                 <Text key={idx}>{amenity}</Text>

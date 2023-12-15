@@ -83,6 +83,7 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         justifyContent: "space-between",
         marginBottom: 20,
+        // alignItems: "center"
     },
     image: {
         width: '100%',
@@ -95,6 +96,9 @@ const styles = StyleSheet.create({
     content: {
         width: '60%',
         paddingLeft: 10,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between"
     },
     flexCenter: {
         display: "flex",

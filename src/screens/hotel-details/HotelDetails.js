@@ -1,10 +1,10 @@
 import { BottomModal } from "react-native-modals";
 import { ModalFooter } from "react-native-modals";
-import { SlideAnimation } from "react-native-modals";
+// import { SlideAnimation } from "react-native-modals";
 import { ModalContent } from "react-native-modals";
 import { ModalTitle } from "react-native-modals";
 
-import MockHotelData from '../../redux/hotel/mock-data/HotelDetails'
+// import MockHotelData from '../../redux/hotel/mock-data/HotelDetails'
 import { Pressable, ScrollView, StyleSheet, Text, View, Image, TextInput } from "react-native";
 import React, { useLayoutEffect, useState, useEffect } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -43,7 +43,6 @@ const HotelDetails = ({ route }) => {
         }
     }, [hotelId]);
     useEffect(() => {
-        console.log(cart?.rooms)
         if (cart?.rooms?.length) {
             const total = cart.rooms.reduce((acc, room) => (
                 acc + (room?.price * parseInt(room?.count || 0, 10))
@@ -140,7 +139,7 @@ const HotelDetails = ({ route }) => {
                     </View>
                     {/* room list */}
                     <View style={styles.section}>
-                        {MockHotelData?.roomList?.map((room, idx) => (
+                        {Array.isArray(hotel?.roomList) && hotel?.roomList?.map((room, idx) => (
                             <Room key={idx} room={room} />
                         ))}
                     </View>

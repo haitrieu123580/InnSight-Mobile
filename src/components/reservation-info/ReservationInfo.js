@@ -11,7 +11,7 @@ const ReservationInfo = () => {
             <View style={{ ...styles.flex, justifyContent: "space-between" }}>
                 <View style={{ width: "20%", height: "100%", }}>
                     <Image
-                        source={{ uri: 'https://source.unsplash.com/random?sig=2' }}
+                        source={{ uri: Array.isArray(cart?.hotel?.hotelImages) ? cart?.hotel?.hotelImages[0] : "" }}
                         containerStyle={styles.image}
                     />
                 </View>
