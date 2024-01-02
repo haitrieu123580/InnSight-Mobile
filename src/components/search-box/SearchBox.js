@@ -3,7 +3,7 @@ import { StyleSheet, View, TextInput, Text, TouchableOpacity, Pressable, Modal, 
 // import { Button } from 'react-native';
 import { Button } from '@rneui/base';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import Autocomplete from 'react-native-autocomplete-input';
+// import Autocomplete from 'react-native-autocomplete-input';
 import VNProvince from '../../utils/VNProvince';
 import DateRangePicker from '../date-range-picker/DateRangePicker';
 import { BottomModal } from "react-native-modals";
@@ -15,7 +15,7 @@ import { ModalContent } from "react-native-modals";
 import { ListItem } from '@rneui/base';
 import { useDispatch } from 'react-redux';
 import HotelAction from '../../redux/hotel/action';
-import DatePicker from "react-native-date-ranges";
+// import DatePicker from "react-native-date-ranges";
 
 const SearchBox = ({ navigation }) => {
     const [openDateModal, setOpenDateModal] = useState(false);
@@ -191,7 +191,10 @@ const SearchBox = ({ navigation }) => {
                                         <Pressable key={idx} onPress={() => { setProvinces(p.name) }}>
                                             <ListItem >
                                                 <ListItem.Content>
-                                                    <Text> {p.name}</Text>
+                                                    {/* <Text> {p.name}</Text> */}
+                                                    <TouchableOpacity>
+                                                        <Text> {p.name}</Text>
+                                                    </TouchableOpacity>
                                                 </ListItem.Content>
                                             </ListItem>
                                         </Pressable>

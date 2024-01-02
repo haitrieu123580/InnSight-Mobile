@@ -33,7 +33,7 @@ const ChangePassword = () => {
         }
     }
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <Input
                 label="Mật khẩu hiện tại"
                 labelStyle={styles.labelStyle}
@@ -64,7 +64,7 @@ const ChangePassword = () => {
                     handleSubmit();
                 }}
                 title={"Gửi"}></Button>
-        </View>
+        </ScrollView>
     )
 }
 
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center",
+        // justifyContent: "center",
         alignContent: "center",
         height: "100%",
         padding: 20

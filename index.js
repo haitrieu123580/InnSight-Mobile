@@ -18,3 +18,8 @@ Navigation.events().registerAppLaunchedListener(() => {
         }
     });
 });
+Navigation.setDefaultOptions({
+    topBar: {
+        visible: "hidden"
+    }
+});
