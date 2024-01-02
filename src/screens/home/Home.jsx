@@ -33,15 +33,15 @@ const Home = ({ navigation }) => {
                     <View>
                         <View style={styles.tab}>
                             <Text style={styles.tabText}>Đà Nẵng</Text>
-                            <Image style={{ width: '100%', height: 150, borderRadius: 8 }} source={require('../../assets/images/DaNang.png')} />
+                            <Image style={{ width: '100%', height: 150, borderRadius: 8 }} source={require('../../assets/images/DaNang.jpeg')} />
                         </View>
                         <View style={styles.tab}>
                             <Text style={styles.tabText}>Hồ Chí Minh</Text>
-                            <Image style={{ width: '100%', height: 150, borderRadius: 8 }} source={require('../../assets/images/HoChiMinh.png')} />
+                            <Image style={{ width: '100%', height: 150, borderRadius: 8 }} source={require('../../assets/images/HoChiMinh.jpeg')} />
                         </View>
                         <View style={styles.tab}>
                             <Text style={styles.tabText}>Huế</Text>
-                            <Image style={{ width: '100%', height: 150, borderRadius: 8 }} source={require('../../assets/images/Hue.png')} />
+                            <Image style={{ width: '100%', height: 150, borderRadius: 8 }} source={require('../../assets/images/Hue.jpeg')} />
                         </View>
                     </View>
                 </View>
@@ -52,7 +52,7 @@ const Home = ({ navigation }) => {
                         <View style={styles.card}>
                             <Card.Image
                                 style={{ padding: 0, borderRadius: 8, height: 200, }}
-                                source={require('../../assets/images/Hotel.png')}
+                                source={require('../../assets/images/Hotel.jpeg')}
 
                             />
                             <Text style={{ ...styles.title, textAlign: "center", fontSize: 16 }}>
@@ -65,7 +65,7 @@ const Home = ({ navigation }) => {
                         <View style={styles.card}>
                             <Card.Image
                                 style={{ padding: 0, borderRadius: 8, height: 200, }}
-                                source={require('../../assets/images/Hotel.png')}
+                                source={require('../../assets/images/Hotel.jpeg')}
                             />
                             <Text style={{ ...styles.title, textAlign: "center", fontSize: 16 }}>
                                 Taian Hotel & Apartment
