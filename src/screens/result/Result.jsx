@@ -71,7 +71,7 @@ const Result = ({ navigation }) => {
                     </View>
                 ))}
                 <Text style={styles.priceColor}>
-                    {item?.minPrice} VND
+                    {item?.minPrice.toLocaleString('vi-VN')} VND
                     <Text style={{ color: 'black', fontSize: 14, marginLeft: 10 }}>
                         Phòng/đêm
                     </Text>

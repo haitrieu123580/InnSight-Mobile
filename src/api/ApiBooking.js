@@ -8,7 +8,6 @@ const config = {
     },
 };
 export const bookingApi = async (reservation) => {
-    console.log(reservation)
     const response = await axios.post(`${BASE_URL}/reservation/booking`, JSON.stringify(reservation), config);
     return { Data: response?.data };
 }
@@ -23,13 +22,9 @@ export const payment = async (reservation) => {
 };
 
 export const reservationDetail = async (requestData) => {
-
-    // try {
-    //     const response = await axios.post(`${BASE_URL}/reservation/details`, JSON.stringify(requestData), config);
-    //     return { Data: response?.data };
-    // } catch (error) {
-    //     return { Error: error };
-    // }
+    console.log(requestData)
+    const response = await axios.post(`${BASE_URL}/reservation/details`, JSON.stringify(requestData), config);
+    return { Data: response?.data };
 };
 
 export const save_invoice = async (data) => {

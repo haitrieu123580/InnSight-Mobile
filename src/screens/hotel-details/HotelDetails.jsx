@@ -193,7 +193,7 @@ const HotelDetails = ({ route }) => {
             </ScrollView>
             <View style={{ ...styles.flex, padding: 10, backgroundColor: "#FFF" }}>
                 <TextInput style={{ color: "#E65503", fontSize: 18, fontWeight: "700" }}>
-                    {`${totalPrice} VND`}
+                    {`${totalPrice.toLocaleString('vi-VN')} VND`}
                 </TextInput>
                 <Button
                     titleStyle={

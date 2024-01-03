@@ -19,19 +19,21 @@ function* watchBooking() {
 }
 
 function* watchReservationDetail() {
-    // yield takeEvery(actions.RESERVATION_DETAIL, function* (payload) {
-    //     const { requestData, onSuccess, onError } = payload
-    //     try {
-    //         const response = yield call(reservationDetail, requestData);
-    //         if (response?.Data) {
-    //             yield put(booking(response?.Data))
-    //             onSuccess && onSuccess();
-    //         }
-    //     } catch (error) {
-    //         onError && onError();
-    //     } finally {
-    //     }
-    // });
+    yield takeEvery(actions.RESERVATION_DETAIL, function* (payload) {
+        const { requestData, onSuccess, onError } = payload
+        try {
+            const response = yield call(reservationDetail, { requestData: requestData });
+            console.log(response)
+            if (response?.Data) {
+                yield put(booking(response?.Data))
+                onSuccess && onSuccess();
+            }
+        } catch (error) {
+            console.log(error)
+            onError && onError();
+        } finally {
+        }
+    });
 }
 
 function* watchPayment() {

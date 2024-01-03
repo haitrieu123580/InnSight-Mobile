@@ -60,7 +60,7 @@ const Room = ({ room }) => {
                         <View style={styles.container}>
                             <View>
                                 <Text style={styles.label}>Giá phòng hôm nay</Text>
-                                <Text style={{ fontSize: 18, fontWeight: "700", color: "red" }}>{room?.price} VND</Text>
+                                <Text style={{ fontSize: 18, fontWeight: "700", color: "red" }}>{room?.price.toLocaleString('vi-VN')} VND</Text>
                             </View>
                             <View>
                                 <Text style={styles.label}>Chọn số lượng phòng</Text>
