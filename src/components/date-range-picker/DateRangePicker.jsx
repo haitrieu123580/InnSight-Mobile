@@ -58,12 +58,12 @@ const DateRangePicker = ({ handleCancel, handleSave, onStartDay, onEndDay }) => 
                 current={initialDate}
                 minDate={initialDate}
                 onDayPress={onDayPress}
-                // calendarHeight={auto}
-                horizontal={false}
-                hideArrows={true}
+                calendarHeight={"100%"}
+                horizontal={true}
+                hideArrows={false}
                 pagingEnabled={true}
                 markedDates={marked}
-                style={{ marginRight: 20 }}
+                style={{ marginLeft: -15 }}
             />
             <Button style={styles.button} title="Save" onPress={handleSave} />
         </View>

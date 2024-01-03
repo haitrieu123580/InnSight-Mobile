@@ -101,7 +101,7 @@ const Room = ({ room }) => {
                         <ModalButton
                             text="Apply"
                             style={{
-                                marginBottom: 20,
+                                marginBottom: 0,
                                 color: "white",
                                 backgroundColor: "#003580",
                             }}

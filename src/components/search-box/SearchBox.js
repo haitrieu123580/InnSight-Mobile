@@ -140,7 +140,7 @@ const SearchBox = ({ navigation }) => {
                                 <ModalButton
                                     text="Apply"
                                     style={{
-                                        marginBottom: 20,
+                                        marginBottom: 0,
                                         color: "white",
                                         backgroundColor: "#003580",
                                     }}
@@ -153,7 +153,7 @@ const SearchBox = ({ navigation }) => {
                         visible={openDateModal}
                         onTouchOutside={() => setOpenDateModal(!openDateModal)}
                     >
-                        <ModalContent style={{ width: "100%", height: 310 }}>
+                        <ModalContent style={{ width: "100%", height: 350 }}>
                             <DateRangePicker handleSave={() => setOpenDateModal(openDateModal)} onEndDay={setEndDay} onStartDay={setStartDay} />
 
                         </ModalContent>
@@ -172,7 +172,7 @@ const SearchBox = ({ navigation }) => {
                                     <ModalButton
                                         text="Apply"
                                         style={{
-                                            marginBottom: 20,
+                                            marginBottom: 0,
                                             color: "white",
                                             backgroundColor: "#003580",
                                         }}
@@ -188,16 +188,13 @@ const SearchBox = ({ navigation }) => {
                             <ModalContent style={{ width: "100%", height: 310 }}>
                                 <ScrollView>
                                     {VNProvince.map((p, idx) => (
-                                        <Pressable key={idx} onPress={() => { setProvinces(p.name) }}>
+                                        <TouchableOpacity key={idx} onPress={() => { setProvinces(p.name) }}>
                                             <ListItem >
                                                 <ListItem.Content>
-                                                    {/* <Text> {p.name}</Text> */}
-                                                    <TouchableOpacity>
-                                                        <Text> {p.name}</Text>
-                                                    </TouchableOpacity>
+                                                    <Text> {p.name}</Text>
                                                 </ListItem.Content>
                                             </ListItem>
-                                        </Pressable>
+                                        </TouchableOpacity>
 
                                     ))}
                                 </ScrollView>
@@ -218,7 +215,7 @@ const SearchBox = ({ navigation }) => {
                                     <ModalButton
                                         text="Apply"
                                         style={{
-                                            marginBottom: 20,
+                                            marginBottom: 0,
                                             color: "white",
                                             backgroundColor: "#003580",
                                         }}
