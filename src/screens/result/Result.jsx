@@ -1,73 +1,115 @@
-import { StyleSheet, Text, View, Image, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, Image, ActivityIndicator, FlatList } from 'react-native'
 import React from 'react'
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import mockData from '../../redux/hotel/mock-data/HotelResult'
 import { Button } from '@rneui/base';
-import { useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
+
 const Result = ({ navigation }) => {
     const { result } = useSelector(state => state.Hotel)
+    const dispatch = useDispatch();
+    const [hotels, setHotels] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [isLoading, setIsLoading] = useState(false);
+    const getHotels = () => {
+        setIsLoading(true);
+        // dispatch({
+        //     type: HotelAction.SEARCH_HOTELS_START,
+        //     province: provinces,
+        //     adults: adults,
+        //     children: children,
+        //     rooms: rooms,
+        //     startDay: startDay,
+        //     endDay: endDay,
+        //     onSuccess: () => {
+        //         navigation.navigate('Result')
+        //     },
+        //     onError: () => {
+        //         Alert.alert("Không tìm thấy")
+        //     }
+        // })
+    };
     useEffect(() => {
 
     }, [result])
+    const renderLoader = () => {
+        return (
+            isLoading ?
+                <View style={styles.loaderStyle}>
+                    <ActivityIndicator size="large" color="#aaa" />
+                </View> : null
+        );
+    };
+
+    const loadMoreItem = () => {
+        setCurrentPage(currentPage + 1);
+    };
     const handleSelectHotel = (id) => {
         navigation.navigate('Hotel', { hotelId: id })
     }
-    return (
-        <ScrollView style={{ backgroundColor: "#fff", padding: 10 }}>
-            <Text>{result?.totalItems} Chỗ nghỉ</Text>
-            <View style={styles.resultList}>
-                {result?.hotels?.map((result, idx) => (
-                    <View key={idx} style={styles.resultBlock}>
-                        <View style={{ ...styles.imageWrapper, backgroundColor: 'gray' }}>
-                            <Image
-                                source={{ uri: result?.hotelImgPath }}
-                                style={{ ...styles.image, resizeMode: 'cover' }}
-                            />
+    const renderItem = ({ item }) => {
+        return (<View style={styles.resultBlock}>
+            <View style={{ ...styles.imageWrapper, backgroundColor: 'gray' }}>
+                <Image
+                    source={{ uri: item?.hotelImgPath }}
+                    style={{ ...styles.image, resizeMode: 'cover' }}
+                />
 
-                        </View>
+            </View>
 
 
-                        <View style={styles.content}>
-                            <Text style={{ color: '#0735D6', fontSize: 20, fontWeight: '700' }}>{result?.hotelName}</Text>
-                            <View style={styles.flexCenter}>
-                                <Icon name="location-pin" size={20} color="black" />
-                                <Text>{result?.address}</Text>
-                            </View>
-                            {result?.amenities?.map((item, idx) => (
-                                <View style={styles.flexCenter} key={idx}>
-                                    <Icon name='check' size={20} color="black" />
-                                    <Text>{item}</Text>
-                                </View>
-                            ))}
-                            <Text style={styles.priceColor}>
-                                {result?.minPrice} VND
-                                <Text style={{ color: 'black', fontSize: 14, marginLeft: 10 }}>
-                                    Phòng/đêm
-                                </Text>
-                            </Text>
-                            <View style={{ flexDirection: "row", justifyContent: "space-between", width: '100%' }}>
-                                <View style={styles.flexCenter}>
-                                    <Text style={{ color: 'red' }}>{result?.rating}/10</Text>
-                                    <View><Text>{`  ${result?.reviews} đánh giá`}</Text></View>
-                                </View>
-                            </View>
-                            <Button
-                                buttonStyle={
-                                    {
-                                        backgroundColor: "#E67E03"
-                                    }
-                                }
-                                onPress={(event) => { event.preventDefault(); handleSelectHotel(result?.id) }}
-                            >
-                                Chọn phòng
-                            </Button>
-                        </View>
-
+            <View style={styles.content}>
+                <Text style={{ color: '#0735D6', fontSize: 20, fontWeight: '700' }}>{item?.hotelName}</Text>
+                <View style={styles.flexCenter}>
+                    <Icon name="location-pin" size={20} color="black" />
+                    <Text>{item?.address}</Text>
+                </View>
+                {item?.amenities?.map((amenty, idx) => (
+                    <View style={styles.flexCenter} key={idx}>
+                        <Icon name='check' size={20} color="black" />
+                        <Text>{amenty}</Text>
                     </View>
                 ))}
+                <Text style={styles.priceColor}>
+                    {item?.minPrice} VND
+                    <Text style={{ color: 'black', fontSize: 14, marginLeft: 10 }}>
+                        Phòng/đêm
+                    </Text>
+                </Text>
+                <View style={{ flexDirection: "row", justifyContent: "space-between", width: '100%' }}>
+                    <View style={styles.flexCenter}>
+                        <Text style={{ color: 'red' }}>{item?.rating}/10</Text>
+                        <View><Text>{`  ${item?.reviews} đánh giá`}</Text></View>
+                    </View>
+                </View>
+                <Button
+                    buttonStyle={
+                        {
+                            backgroundColor: "#E67E03"
+                        }
+                    }
+                    onPress={(event) => { event.preventDefault(); handleSelectHotel(item?.id) }}
+                >
+                    Chọn phòng
+                </Button>
             </View>
-        </ScrollView>
+
+        </View>)
+    }
+    return (
+        <View style={{ backgroundColor: "#fff", padding: 10 }}>
+            <Text>{result?.totalItems} Chỗ nghỉ</Text>
+            <View style={styles.resultList}>
+                <FlatList
+                    data={result?.hotels}
+                    renderItem={renderItem}
+                    keyExtractor={item => item?.id}
+                    ListFooterComponent={renderLoader}
+                    onEndReached={loadMoreItem}
+                    onEndReachedThreshold={0}
+                />
+            </View>
+        </View>
     )
 }
 
