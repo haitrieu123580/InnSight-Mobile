@@ -49,10 +49,12 @@ const Result = ({ navigation }) => {
     }
     const renderItem = ({ item }) => {
         return (<View style={styles.resultBlock}>
-            <View style={{ ...styles.imageWrapper, backgroundColor: 'gray' }}>
+            <View style={{ ...styles.imageWrapper, backgroundColor: 'gray', minHeight: 300 }}>
                 <Image
                     source={{ uri: item?.hotelImgPath }}
-                    style={{ ...styles.image, resizeMode: 'cover' }}
+                    style={{
+                        ...styles.image, resizeMode: 'cover'
+                    }}
                 />
 
             </View>
@@ -64,23 +66,23 @@ const Result = ({ navigation }) => {
                     <Icon name="location-pin" size={20} color="black" />
                     <Text>{item?.address}</Text>
                 </View>
-                {item?.amenities?.map((amenty, idx) => (
+                {item?.amenities?.slice(0, 5).map((amenty, idx) => (
                     <View style={styles.flexCenter} key={idx}>
                         <Icon name='check' size={20} color="black" />
                         <Text>{amenty}</Text>
                     </View>
                 ))}
+
                 <Text style={styles.priceColor}>
                     {item?.minPrice.toLocaleString('vi-VN')} VND
-                    <Text style={{ color: 'black', fontSize: 14, marginLeft: 10 }}>
-                        Phòng/đêm
-                    </Text>
+                </Text>
+                <Text style={{ color: 'black', fontSize: 14, fontWeight: 700 }}>
+                    Phòng/đêm
                 </Text>
                 <View style={{ flexDirection: "row", justifyContent: "space-between", width: '100%' }}>
-                    <View style={styles.flexCenter}>
-                        <Text style={{ color: 'red' }}>{item?.rating}/10</Text>
-                        <View><Text>{`  ${item?.reviews} đánh giá`}</Text></View>
-                    </View>
+                    <Text style={{ color: 'red' }}>{item?.rating}/10</Text>
+                    <Text>{`  ${item?.reviews} đánh giá`}</Text>
+
                 </View>
                 <Button
                     buttonStyle={
@@ -125,6 +127,7 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         justifyContent: "space-between",
         marginBottom: 20,
+
         // alignItems: "center"
     },
     image: {

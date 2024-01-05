@@ -21,6 +21,7 @@ const Invoice = () => {
     }, [navigation]);
 
     const { bookingReserved } = useSelector(state => state.Booking)
+    console.log(bookingReserved)
     return (
         <ScrollView style={styles.bg}>
             <Text style={{ color: "#003B95", fontSize: 20, fontWeight: "700", marginTop: 10 }}>
@@ -71,7 +72,7 @@ const Invoice = () => {
             </View>
             <View style={{ ...styles.flex_between, paddingBottom: 20 }}>
                 <Text style={{ ...styles.title, ...styles.colorRed }}>Tổng cộng</Text>
-                <Text style={{ ...styles.title, ...styles.colorRed }}>{(bookingReserved.total).toLocaleString('vi-VN') || "Tổng tiền"}</Text>
+                <Text style={{ ...styles.title, ...styles.colorRed }}>{`${(bookingReserved.total).toLocaleString('vi-VN')} VND` || "Tổng tiền"}</Text>
             </View>
         </ScrollView >
     )

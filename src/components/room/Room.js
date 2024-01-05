@@ -31,13 +31,13 @@ const Room = ({ room }) => {
                 <View style={styles.container}>
                     {/* room image */}
                     <View style={styles.hotelImage}>
-                        <Card style={{ padding: 0 }}>
+                        <Card style={{ padding: 0 }} containerStyle={{ padding: 0 }}>
                             <Card.Image
                                 source={{
                                     uri: room?.roomImage || ""
                                 }}
                             />
-                            {room?.roomAmenities?.map((amenity, idx) => (
+                            {room?.roomAmenities?.slice(0, 5)?.map((amenity, idx) => (
                                 <Text key={idx}>{amenity}</Text>
                             ))}
                         </Card>
@@ -50,7 +50,7 @@ const Room = ({ room }) => {
                             <Text>{`Sức chứa:${room?.adult} người lớn, ${room?.children} trẻ em`}</Text>
                         </View>
                         <View>
-                            {room?.roomAmenities?.map((amenity, idx) => (
+                            {room?.roomAmenities?.slice(0, 5).map((amenity, idx) => (
                                 <View key={idx} style={{ ...styles.container, justifyContent: "flex-start", marginTop: 5, alignItems: "center" }}>
                                     <FontAwesome5 name="check" size={14} color="blue" />
                                     <Text style={{ marginLeft: 5 }}>{amenity}</Text>

@@ -8,8 +8,13 @@ function* watchBooking() {
         try {
             const response = yield call(bookingApi, reservation);
             if (response?.Data !== "") {
-                yield put(booking(response?.Data))
-                onSuccess && onSuccess();
+                if (response?.Data?.reservationCode) {
+                    const response_2 = yield call(reservationDetail, { requestData: response?.Data?.reservationCode });
+                    if (response_2?.Data) {
+                        yield put(booking(response_2?.Data))
+                        onSuccess && onSuccess();
+                    }
+                }
             }
         } catch (error) {
             onError && onError();
