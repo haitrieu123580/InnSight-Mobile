@@ -22,7 +22,6 @@ export const payment = async (reservation) => {
 };
 
 export const reservationDetail = async (requestData) => {
-    console.log(requestData)
     const response = await axios.post(`${BASE_URL}/reservation/details`, JSON.stringify(requestData), config);
     return { Data: response?.data };
 };
@@ -34,4 +33,10 @@ export const save_invoice = async (data) => {
     // } catch (error) {
     //     return { Error: error };
     // }
+};
+export const reservationCancel = async ({ reservationCode }) => {
+    console.log(`${BASE_URL}/reservation/cancel`)
+    const response = await axios.post(`${BASE_URL}/reservation/cancel`, JSON.stringify({ reservationCode: reservationCode }), config);
+    console.log(response)
+    return { Data: response?.data }
 };

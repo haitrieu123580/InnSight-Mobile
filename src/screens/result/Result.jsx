@@ -1,49 +1,108 @@
-import { StyleSheet, Text, View, Image, ActivityIndicator, FlatList } from 'react-native'
+import {
+    StyleSheet,
+    Text,
+    View, Image, ActivityIndicator, FlatList, TouchableOpacity
+} from 'react-native'
 import React from 'react'
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Button } from '@rneui/base';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
-
+import HotelAction from '../../redux/hotel/action';
 const Result = ({ navigation }) => {
-    const { result } = useSelector(state => state.Hotel)
+    const { result, searchParams } = useSelector(state => state.Hotel)
     const dispatch = useDispatch();
     const [hotels, setHotels] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
+    const [search, setSearch] = useState({});
+    const [province, setProvince] = useState("")
     const getHotels = () => {
         setIsLoading(true);
-        // dispatch({
-        //     type: HotelAction.SEARCH_HOTELS_START,
-        //     province: provinces,
-        //     adults: adults,
-        //     children: children,
-        //     rooms: rooms,
-        //     startDay: startDay,
-        //     endDay: endDay,
-        //     onSuccess: () => {
-        //         navigation.navigate('Result')
-        //     },
-        //     onError: () => {
-        //         Alert.alert("Không tìm thấy")
-        //     }
-        // })
+        console.log(searchParams);
+        dispatch({
+            type: HotelAction.SEARCH_HOTELS_START,
+            province: searchParams?.province,
+            checkinDay: searchParams?.checkinDay || searchParams?.startDay,
+            checkoutDay: searchParams?.checkoutDay || searchParams?.endDay,
+            count: searchParams?.count || searchParams?.rooms,
+            adultCount: searchParams?.adultCount || searchParams?.adults,
+            childrenCount: searchParams?.childrenCount || searchParams?.children,
+            rate: searchParams?.rate,
+            fromPrice: searchParams?.fromPrice,
+            toPrice: searchParams?.toPrice,
+            review: searchParams?.review,
+            pageIndex: !currentPage ? 1 : currentPage,
+            pageSize: 6,
+            onSuccess: () => {
+                // setHotels([...hotels, ...result?.hotels])
+                setCurrentPage(currentPage + 1);
+            },
+            onError: () => {
+                Alert.alert("Không tìm thấy");
+            },
+        });
     };
-    useEffect(() => {
 
-    }, [result])
+
+
+    useEffect(() => {
+        if (result === undefined) {
+
+        }
+        else if (!Object.keys(result).length) {
+            dispatch({
+                type: HotelAction.SEARCH_HOTELS_START,
+                province: searchParams?.province,
+                checkinDay: searchParams?.checkinDay || searchParams?.startDay,
+                checkoutDay: searchParams?.checkoutDay || search?.endDay,
+                count: searchParams?.count || searchParams?.rooms,
+                adultCount: searchParams?.adultCount || searchParams?.adults,
+                childrenCount: search?.childrenCount || searchParams?.children,
+                rate: searchParams?.rate,
+                fromPrice: searchParams?.fromPrice,
+                toPrice: searchParams?.toPrice,
+                review: searchParams?.review,
+                pageIndex: 1,
+                pageSize: 6,
+                onSuccess: () => {
+                    setIsLoading(true)
+                },
+                onError: () => {
+                    Alert.alert("Không tìm thấy")
+                }
+            })
+        }
+        if (result && Array.isArray(result?.hotels)) {
+            setHotels([...hotels, ...result?.hotels])
+        }
+
+    }, [result, searchParams])
+    useEffect(() => {
+        setSearch(searchParams)
+        setProvince(searchParams?.province || "")
+        setHotels([]); // Resetting the hotels state
+        getHotels()
+    }, [searchParams])
     const renderLoader = () => {
         return (
-            isLoading ?
-                <View style={styles.loaderStyle}>
-                    <ActivityIndicator size="large" color="#aaa" />
-                </View> : null
+            <View style={styles.footer}>
+                <TouchableOpacity
+                    activeOpacity={0.9}
+                    onPress={getHotels}
+                    //On Click of button load more data
+                    style={styles.loadMoreBtn}>
+                    <Text style={styles.btnText}>Load More</Text>
+                    {isLoading ? (
+                        <ActivityIndicator
+                            color="white"
+                            style={{ marginLeft: 8 }} />
+                    ) : null}
+                </TouchableOpacity>
+            </View>
         );
     };
 
-    const loadMoreItem = () => {
-        setCurrentPage(currentPage + 1);
-    };
     const handleSelectHotel = (id) => {
         navigation.navigate('Hotel', { hotelId: id })
     }
@@ -103,12 +162,12 @@ const Result = ({ navigation }) => {
             <Text>{result?.totalItems} Chỗ nghỉ</Text>
             <View style={styles.resultList}>
                 <FlatList
-                    data={result?.hotels}
+                    data={hotels}
                     renderItem={renderItem}
-                    keyExtractor={item => item?.id}
+                    keyExtractor={(item, index) => index.toString()}
                     ListFooterComponent={renderLoader}
-                    onEndReached={loadMoreItem}
-                    onEndReachedThreshold={0}
+                // onEndReached={loadMoreItem}
+                // onEndReachedThreshold={0}
                 />
             </View>
         </View>
@@ -158,5 +217,10 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: "700",
     },
-
+    footer: {
+        padding: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
+    },
 })

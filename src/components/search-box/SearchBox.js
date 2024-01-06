@@ -16,7 +16,7 @@ import { ListItem } from '@rneui/base';
 import { useDispatch } from 'react-redux';
 import HotelAction from '../../redux/hotel/action';
 // import DatePicker from "react-native-date-ranges";
-
+import { setSearchParams } from '../../redux/hotel/slice'
 const SearchBox = ({ navigation }) => {
     const [openDateModal, setOpenDateModal] = useState(false);
     const [openOptionModal, setOpenOptionModal] = useState(false);
@@ -35,21 +35,32 @@ const SearchBox = ({ navigation }) => {
             Alert.alert("Xin hãy chọn đầy đủ thông tin")
         }
         else {
-            dispatch({
-                type: HotelAction.SEARCH_HOTELS_START,
+            // console.log(startDay, endDay)
+            dispatch(setSearchParams({
                 province: provinces,
                 adults: adults,
                 children: children,
                 rooms: rooms,
                 startDay: startDay,
                 endDay: endDay,
-                onSuccess: () => {
-                    navigation.navigate('Result')
-                },
-                onError: () => {
-                    Alert.alert("Không tìm thấy")
-                }
-            })
+            }));
+
+            navigation.navigate('Result')
+            // dispatch({
+            //     type: HotelAction.SEARCH_HOTELS_START,
+            //     province: provinces,
+            //     adults: adults,
+            //     children: children,
+            //     rooms: rooms,
+            //     startDay: startDay,
+            //     endDay: endDay,
+            //     onSuccess: () => {
+            //         navigation.navigate('Result')
+            //     },
+            //     onError: () => {
+            //         Alert.alert("Không tìm thấy")
+            //     }
+            // })
         }
     };
     return (
@@ -74,7 +85,7 @@ const SearchBox = ({ navigation }) => {
                         editable={false}
                         placeholder={`${startDay || "Check-in"} -  ${endDay || "Check-out"}`}
                     />
-                 
+
                 </Pressable>
 
             </View>

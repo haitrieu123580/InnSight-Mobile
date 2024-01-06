@@ -1,10 +1,14 @@
-import { StyleSheet, Text, View, ScrollView, Image } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, Image, Alert } from 'react-native'
 import React, { useLayoutEffect, useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from 'react-redux';
 import { AntDesign, Entypo } from "@expo/vector-icons";
+import { Button } from 'react-native';
+import { useDispatch } from 'react-redux';
+import BookingAction from '../../redux/booking/action';
 const Invoice = () => {
     const navigation = useNavigation();
+    const dispatch = useDispatch();
     useLayoutEffect(() => {
         navigation.setOptions({
             title: 'Innsight',
@@ -22,6 +26,18 @@ const Invoice = () => {
 
     const { bookingReserved } = useSelector(state => state.Booking)
     console.log(bookingReserved)
+    const handleCancelInvoice = () => {
+        dispatch({
+            type: BookingAction.RESERVATION_CANCEL,
+            reservationCode: bookingReserved.reservationCode,
+            onSuccess: () => {
+                Alert.alert("Huỷ thành công")
+            },
+            onError: () => {
+                Alert.alert("Huỷ thất bại")
+            }
+        })
+    }
     return (
         <ScrollView style={styles.bg}>
             <Text style={{ color: "#003B95", fontSize: 20, fontWeight: "700", marginTop: 10 }}>
@@ -74,6 +90,13 @@ const Invoice = () => {
                 <Text style={{ ...styles.title, ...styles.colorRed }}>Tổng cộng</Text>
                 <Text style={{ ...styles.title, ...styles.colorRed }}>{`${(bookingReserved.total).toLocaleString('vi-VN')} VND` || "Tổng tiền"}</Text>
             </View>
+            <Button
+                title='Huỷ phòng'
+                onPress={() => {
+                    handleCancelInvoice();
+                }}>
+
+            </Button>
         </ScrollView >
     )
 }

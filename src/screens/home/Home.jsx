@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import HotelAction from '../../redux/hotel/action';
 import { Alert } from 'react-native';
 import moment from 'moment';
+import { setSearchParams } from '../../redux/hotel/slice'
 const Home = ({ navigation }) => {
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -30,21 +31,31 @@ const Home = ({ navigation }) => {
     const dispatch = useDispatch();
     const handleClick = (text) => {
         console.log(text)
-        dispatch({
-            type: HotelAction.SEARCH_HOTELS_START,
+        dispatch(setSearchParams({
             province: text,
             adults: 2,
             children: 0,
             rooms: 1,
             startDay: moment().format('YYYY-MM-DD'),
             endDay: moment().add(1, 'days').format('YYYY-MM-DD'),
-            onSuccess: () => {
-                navigation.navigate('Result')
-            },
-            onError: () => {
-                Alert.alert("Không tìm thấy")
-            }
-        })
+        }));
+
+        navigation.navigate('Result')
+        // dispatch({
+        //     type: HotelAction.SEARCH_HOTELS_START,
+        //     province: text,
+        //     adults: 2,
+        //     children: 0,
+        //     rooms: 1,
+        //     startDay: moment().format('YYYY-MM-DD'),
+        //     endDay: moment().add(1, 'days').format('YYYY-MM-DD'),
+        //     onSuccess: () => {
+        //         navigation.navigate('Result')
+        //     },
+        //     onError: () => {
+        //         Alert.alert("Không tìm thấy")
+        //     }
+        // })
     }
     return (
         <View style={{ backgroundColor: "#fff", height: "auto" }}>
